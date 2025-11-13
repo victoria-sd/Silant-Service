@@ -1,0 +1,107 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block title %}Детали машины: {{ machine.serial_number_machine|default:'-' }}{% endblock %}
+
+{% block content %}
+    <div class="machine-detail-container">
+        {# Заголовок с номером машины #}
+        <div class="machine-detail-header">
+            <h1 class="machine-detail-title">Машина</h1>
+            <span class="machine-serial-number">Зав. №: {{ machine.serial_number_machine|default:"-" }}</span>
+        </div>
+
+        <div class="machine-details-info">
+            Информация о проведенных ТО и рекламациях Вашей техники
+        </div>
+
+        {# Табы для переключения: общая информация, ТО, рекламации #}
+            <div class="tabs-detail">
+                <a href="{% url 'machine_list' %}" class="tab-button-detail">Вернуться к списку машин</a>
+                <a href="{% url 'machine_detail' machine.pk %}" class="tab-button-detail">Общая информация</a>
+                <a href="{% url 'maintenance_list_for_machine' machine.pk %}" class="tab-button-detail">Tехническое обслуживание</a>
+                <a href="{% url 'reclamation_list_for_machine' machine.pk %}" class="tab-button-detail">Рекламации</a>
+            </div>
+
+        {# Отображение общей информации о машине #}
+        <div class="data-table-container">
+            <h4>Последние проведенные ТО:</h4>
+            <a href="{% url 'maintenance_create' machine.pk %}" class="add-data">Внести новые данные</a>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Модель техники</th>
+                        <th>Зав. № машины</th>
+                        <th>Модель двигателя</th>
+                        <th>Зав. № двигателя</th>
+                        <th>Модель трансмиссии (производитель, артикул)</th>
+                        <th>Зав. № трансмиссии</th>
+                        <th>Модель ведущего моста</th>
+                        <th>Зав. № ведущего моста</th>
+                        <th>Модель управляемого моста</th>
+                        <th>Зав. № управляемого моста</th>
+                        <th>Грузополучатель (конечный потребитель)</th>
+                        <th>Адрес поставки (эксплуатации)</th>
+                        <th>Комплектация (доп. опции)</th>
+                        <th>Дата отгрузки с завода</th>
+                        <th>Покупатель</th>
+                        <th>Сервисная компания</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>
+                            <a href="{% url 'dictionary_item_detail' machine.model_technique.pk %}">
+                                {{ machine.model_technique.name|default:"-"|replace_underscores }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="#">
+                                {{ machine.serial_number_machine|default:"-" }}
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'dictionary_item_detail' machine.model_engine.pk %}">
+                                {{ machine.model_engine.name|default:"-"|replace_underscores }}
+                            </a>
+                        </td>
+                        <td>{{ machine.serial_number_engine|default:"-" }}</td>
+                        <td>
+                            <a href="{% url 'dictionary_item_detail' machine.model_transmission.pk %}">
+                                {{ machine.model_transmission.name|default:"-"|replace_underscores }}
+                            </a>
+                        </td>
+                        <td>{{ machine.serial_number_transmission|default:"-" }}</td>
+                        <td>
+                            <a href="{% url 'dictionary_item_detail' machine.model_drive_axle.pk %}">
+                                {{ machine.model_drive_axle.name|default:"-"|replace_underscores }}
+                            </a>
+                        </td>
+                        <td>{{ machine.serial_number_drive_axle|default:"-" }}</td>
+                        <td>
+                            <a href="{% url 'dictionary_item_detail' machine.model_steered_axle.pk %}">
+                                {{ machine.model_steered_axle.name|default:"-"|replace_underscores }}
+                            </a>
+                        </td>
+                        <td>{{ machine.serial_number_steered_axle|default:"-" }}</td>
+                        <td>{{ machine.consignee|default:"-" }}</td>
+                        <td>{{ machine.delivery_address|default:"-" }}</td>
+                        <td>{{ machine.complexation|default:"-"|linebreaks }}</td>
+                        <td>
+                            {% if machine.date_dispatch_from_factory %}
+                            {{ machine.date_dispatch_from_factory|date:"d.m.Y" }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>{{ machine.client.username|replace_underscores }}</td>
+                        <td>{{ machine.service_company.username|default:"-"|replace_underscores }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

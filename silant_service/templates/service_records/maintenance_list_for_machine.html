@@ -1,0 +1,111 @@
+{% extends 'flatpages/default.html' %} {# Расширяем наш базовый шаблон #}
+
+{% load custom_filters %}
+
+{% block title %}Детали машины: {{ machine.serial_number_machine|default:'-' }}{% endblock %}
+
+{% block content %}
+    <div class="machine-detail-container">
+        <div class="machine-detail-header">
+            <h1 class="machine-detail-title">Машина</h1>
+            <span class="machine-serial-number">Зав. №: {{ machine.serial_number_machine|default:"-" }}</span>
+        </div>
+
+        <div class="machine-details-info">
+            Информация о проведенных ТО и рекламациях Вашей техники
+        </div>
+
+        <div class="tabs-detail">
+            <a href="{% url 'machine_list' %}" class="tab-button-detail">Вернуться к списку машин</a>
+            <a href="{% url 'machine_detail' machine.pk %}" class="tab-button-detail">Общая информация</a>
+            <a href="{% url 'maintenance_list_for_machine' machine.pk %}" class="tab-button-detail">Техническое обслуживание</a>
+            <a href="{% url 'reclamation_list_for_machine' machine.pk %}" class="tab-button-detail">Рекламации</a>
+        </div>
+
+        {# --- БЛОК ФИЛЬТРАЦИИ ТО --- #}
+        <div class="filter-form-container">
+            <form method="get" action="{% url 'maintenance_list_for_machine' machine.pk %}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Вид ТО</th>
+                            <th>Сервисная компания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {# Выпадающий список для вида ТО #}
+                            <td>
+                                <select name="type_of_maintenance">
+                                    <option value="">-- Все виды ТО --</option>
+                                    {% for type in types_of_maintenance %}
+                                        <option value="{{ type.pk }}" {% if filter_params.type_of_maintenance == type.pk|stringformat:"s" %}selected{% endif %}>
+                                            {{ type.name|default:"-" }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+
+                            {# Выпадающий список для сервисной компании #}
+                            <td>
+                                <select name="service_company">
+                                    <option value="">-- Все компании --</option>
+                                    {% for company in service_companies %}
+                                        <option value="{{ company.pk }}" {% if filter_params.service_company == company.pk|stringformat:"s" %}selected{% endif %}>
+                                            {{ company.username|default:"-"|replace_underscores }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="filter-button">Применить фильтры</button>
+                <a href="{% url 'maintenance_list_for_machine' machine.pk %}" class="clear-filter-button">Сбросить</a>
+            </form>
+        </div>
+
+        {# Отображение общей информации о машине #}
+        <div class="data-table-container-detail">
+            <h4>Последние проведенные ТО:</h4>
+            <a href="{% url 'maintenance_create' machine.pk %}" class="add-data">Внести новые данные</a>
+            <div class="data-table-container-detail">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Вид ТО</th>
+                            <th>Дата проведения ТО</th>
+                            <th>Наработка, м/час</th>
+                            <th>№ заказ-наряда</th>
+                            <th>дата заказ-наряда</th>
+                            <th>Организация, проводившая ТО</th>
+                            <th>Сервисная компания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for maint in maintenance_list %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'dictionary_item_detail' maint.type_of_maintenance.pk %}">
+                                        {{ maint.type_of_maintenance.name|default:"-" }}
+                                    </a>
+                                </td>
+                                <td>{{ maint.date_of_maintenance|date:"d.m.Y"|default:"-" }}</td>
+                                <td>{{ maint.mileage_hours|default:"-" }}</td>
+                                <td>{{ maint.work_order_number|default:"-" }}</td>
+                                <td>{{ maint.date_work_order|date:"d.m.Y"|default:"-" }}</td>
+                                <td>
+                                    <a href="{% url 'dictionary_item_detail' maint.organization_performing_maintenance.pk %}">
+                                        {{ maint.organization_performing_maintenance.name|default:"-"|replace_underscores }}
+                                    </a>
+                                </td>
+                                <td>{{ maint.service_company.username|default:"-"|replace_underscores }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

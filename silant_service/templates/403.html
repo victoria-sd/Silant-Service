@@ -1,0 +1,12 @@
+{% extends 'account/base.html' %}
+{% load static %}
+
+{% block title %}Ошибка 403{% endblock %}
+
+{% block content %}
+<p>Кажется, у Вас нет доступа к данной странице...</p>
+
+<div class="back-button">
+    <button onclick="window.history.back();" class="btn btn-secondary">Назад</button>
+</div>
+{% endblock %}

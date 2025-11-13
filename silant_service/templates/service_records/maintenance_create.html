@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="main-panel-container form-create-container">
+    <h2 class="characteristics-info">{{ page_title }}</h2>
+    <div class="filter-form-container maintenance-form">
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="form-actions">
+                <button type="submit" class="submit-button">Добавить ТО</button>
+                {% if machine_pk %}
+                    <a href="{% url 'maintenance_list_for_machine' machine_pk %}" class="btn btn-secondary back-button">Вернуться назад</a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

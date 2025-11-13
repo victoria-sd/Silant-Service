@@ -1,0 +1,191 @@
+{% extends 'flatpages/default.html' %}
+
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Список техники{% endblock %}
+
+{% block content %}
+    <div class="main-panel-container">
+
+        {# Информация о пользователе #}
+        <div class="user-info-panel">
+            {% if user.is_authenticated %}
+                {% if user.get_role == 'client' %}
+                    Клиент: {{ user.username|replace_underscores }}
+                {% elif user.get_role == 'service_organization' %}
+                    Сервисная компания: {{ user.username|replace_underscores }}
+                {% elif user.get_role == 'manager' %}
+                    Менеджер: {{ user.username|replace_underscores }}
+                {% else %}
+                    Пользователь: {{ user.username|replace_underscores }}
+                {% endif %}
+            {% else %}
+                <p>Вы не авторизованы.</p>
+            {% endif %}
+        </div>
+
+        <div class="characteristics-info">
+            Информация о комплектации и технических характеристиках Вашей техники
+        </div>
+
+        <div class="data-table-container">
+            <div class="tabs">
+                <a href="{% url 'machine_list' %}" class="tab-button-detail">Общая информация</a>
+                <a href="#" class="tab-button-detail">Техническое обслуживание</a>
+                <a href="#" class="tab-button-detail">Рекламации</a>
+            </div>
+
+            {# --- БЛОК ФИЛЬТРАЦИИ МАШИН --- #}
+            <div class="filter-form-container">
+                <form method="get" action="{% url 'machine_list' %}">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Модель техники</th>
+                                <th>Модель двигателя</th>
+                                <th>Модель трансмиссии</th>
+                                <th>Модель управляемого моста</th>
+                                <th>Модель ведущего моста</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                {# Выпадающие списки для фильтрации моделей #}
+                                <td>
+                                    <select name="model_technique">
+                                        <option value="">-- Все модели техники --</option>
+                                        {% for model in models_technique %}
+                                            <option value="{{ model.pk }}" {% if filter_params.model_technique == model.pk|stringformat:"s" %}selected{% endif %}>
+                                                {{ model.name|default:"-" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="model_engine">
+                                        <option value="">-- Все двигатели --</option>
+                                        {% for model in models_engine %}
+                                            <option value="{{ model.pk }}" {% if filter_params.model_engine == model.pk|stringformat:"s" %}selected{% endif %}>
+                                                {{ model.name|default:"-" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="model_transmission">
+                                        <option value="">-- Все трансмиссии --</option>
+                                        {% for model in models_transmission %}
+                                            <option value="{{ model.pk }}" {% if filter_params.model_transmission == model.pk|stringformat:"s" %}selected{% endif %}>
+                                                {{ model.name|default:"-" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="model_steered_axle">
+                                        <option value="">-- Все управляемые мосты --</option>
+                                        {% for model in models_steered_axle %}
+                                            <option value="{{ model.pk }}" {% if filter_params.model_steered_axle == model.pk|stringformat:"s" %}selected{% endif %}>
+                                                {{ model.name|default:"-" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="model_drive_axle">
+                                        <option value="">-- Все ведущие мосты --</option>
+                                        {% for model in models_drive_axle %}
+                                            <option value="{{ model.pk }}" {% if filter_params.model_drive_axle == model.pk|stringformat:"s" %}selected{% endif %}>
+                                                {{ model.name|default:"-" }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="submit" class="filter-button">Применить фильтры</button>
+                    <a href="{% url 'machine_list' %}" class="clear-filter-button">Сбросить</a>
+                </form>
+            </div>
+
+            {# Таблица с данными #}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>№ п/п</th>
+                            <th>Модель техники</th>
+                            <th>Зав. № машины</th>
+                            <th>Модель двигателя</th>
+                            <th>Зав. № двигателя</th>
+                            <th>Модель трансмиссии (производитель, артикул)</th>
+                            <th>Зав. № трансмиссии</th>
+                            <th>Модель ведущего моста</th>
+                            <th>Зав. № ведущего моста</th>
+                            <th>Модель управляемого моста</th>
+                            <th>Зав. № управляемого моста</th>
+                            <th>Дата отгрузки с завода</th>
+                            <th>Покупатель</th>
+                            <th>Грузополучатель (конечный потребитель)</th>
+                            <th>Адрес поставки (эксплуатации)</th>
+                            <th>Комплектация (доп. опции)</th>
+                            <th>Сервисная компания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if machines %}
+                            {% for machine in machines %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <a href="{% url 'dictionary_item_detail' machine.model_technique.pk %}">
+                                            {{ machine.model_technique.name|default:"-"|replace_underscores }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'machine_detail' machine.pk %}">{{ machine.serial_number_machine }}</a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'dictionary_item_detail' machine.model_engine.pk %}">
+                                            {{ machine.model_engine.name|default:"-" }}
+                                        </a>
+                                    <td>{{ machine.serial_number_engine|default:"-" }}</td>
+                                    <td>
+                                        <a href="{% url 'dictionary_item_detail' machine.model_transmission.pk %}">
+                                            {{ machine.model_transmission.name|default:"-" }}
+                                        </a>
+                                    </td>
+                                    <td>{{ machine.serial_number_transmission|default:"-" }}</td>
+                                    <td>
+                                        <a href="{% url 'dictionary_item_detail' machine.model_drive_axle.pk %}">
+                                            {{ machine.model_drive_axle.name|default:"-" }}
+                                        </a>
+                                    </td>
+                                    <td>{{ machine.serial_number_drive_axle|default:"-" }}</td>
+                                    <td>
+                                        <a href="{% url 'dictionary_item_detail' machine.model_steered_axle.pk %}">
+                                            {{ machine.model_steered_axle.name|default:"-" }}
+                                        </a>
+                                    </td>
+                                    <td>{{ machine.serial_number_steered_axle|default:"-" }}</td>
+                                    <td>{{ machine.date_dispatch_from_factory|date:"d.m.Y" }}</td>
+                                    <td>{{ machine.client.username|default:"-"|replace_underscores }}</td>
+                                    <td>{{ machine.consignee|default:"-" }}</td>
+                                    <td>{{ machine.delivery_address|default:"-" }}</td>
+                                    <td>{{ machine.complexation|default:"-"|truncatewords:7 }}</td>
+                                    <td>{{ machine.service_company.username|default:"-"|replace_underscores }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="18">Машины не найдены.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

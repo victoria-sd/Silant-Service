@@ -1,0 +1,36 @@
+{% extends 'flatpages/default.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+
+<div class="machine-detail-container detail-view-container">
+    {% if item %}
+    <div class="machine-detail-header">
+        <h1 class="machine-detail-title">{{ item.name|default:"-"|replace_underscores }}</h1>
+        {% if item.dictionary %}
+        <p class="item-dictionary-info">
+            Справочник: <strong>{{ item.dictionary.name }}</strong>
+        </p>
+        {% endif %}
+    </div>
+
+    <div class="item-description-section">
+        <h4 class="section-title">Полное описание</h4>
+        <div class="description-content">
+            <p>{{ item.description|linebreaks|default:"-" }}</p>
+        </div>
+    </div>
+
+    <div class="back-button-container">
+        <button onclick="window.history.back();" class="btn btn-secondary back-button">Назад</button>
+    </div>
+
+    {% else %}
+    <p class="empty-data-message">Элемент не найден.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

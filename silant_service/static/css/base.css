@@ -1,0 +1,681 @@
+/* ==========================================================================
+   Общие стили и фирменный стиль «Силант»
+   ========================================================================== */
+
+/* Базовые стили */
+:root {
+    --primary-color: #163E6C;   /* Основной темно-синий */
+    --secondary-color: #D20A11; /* Акцентный красный */
+    --accent-color: #EBE6D6;    /* Бежевый/светло-серый фон */
+    --text-color: #333;         /* Основной цвет текста */
+    --text-muted: #777;         /* Приглушенный текст */
+    --border-color: #ddd;       /* Цвет границ */
+    --light-bg: #f8f8f8;        /* Очень светлый фон */
+    --white-bg: #fff;           /* Белый фон */
+    --hover-secondary: #b3090f; /* Темнее красный для hover */
+    --hover-primary: #112a45;   /* Темнее синий для hover */
+}
+
+@font-face {
+    font-family: 'PT Astra Sans';
+    src: url('../fonts/PT-Astra-Sans_Regular.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    font-family: 'PT Astra Sans', sans-serif;
+    font-size: 13px;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--accent-color);
+    line-height: 1.6;
+}
+
+/* Контейнер для центрирования и ограничения ширины */
+.container,
+.header-container,
+.content-container,
+.footer-container,
+.auth-form-container,
+.machine-detail-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Кнопки и ссылки, похожие на кнопки */
+.btn,
+.auth-button,
+.auth-link,
+.submit-button,
+.filter-button,
+.clear-filter-button,
+.tab-button-detail,
+.add-data,
+.back-button a,
+.auth-links a {
+    display: inline-block;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; /* Плавные переходы */
+    text-align: center;
+    font-size: 0.95em;
+}
+
+/* Основные кнопки (красные) */
+.auth-button,
+.submit-button,
+.filter-button,
+.tab-button-detail.active {
+    background-color: var(--secondary-color);
+    color: white;
+}
+.auth-button:hover,
+.submit-button:hover,
+.filter-button:hover,
+.tab-button-detail.active:hover {
+    background-color: var(--hover-secondary);
+    box-shadow: 0 4px 8px rgba(210, 10, 17, 0.3);
+}
+
+/* Второстепенные кнопки (серые/синие) */
+.auth-link,
+.clear-filter-button,
+.tab-button-detail,
+.add-data,
+.back-button a {
+    background-color: #e9e9e9;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+.auth-link:hover,
+.clear-filter-button:hover,
+.tab-button-detail:hover,
+.add-data:hover,
+.back-button a:hover {
+    background-color: #ddd;
+    color: var(--primary-color);
+    box-shadow: 0 4px 8px rgba(22, 62, 108, 0.1);
+}
+
+/* --- Шапка сайта --- */
+.site-header, .site-footer {
+    background-color: var(--white-bg);
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.header-container, .footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.header-info-auth {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.header-contact, .footer-contact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-color);
+}
+
+.phone-number {
+    font-weight: bold;
+    font-size: 1.1em;
+    color: var(--primary-color);
+}
+
+.social-icon {
+    height: 50px;
+    width: 50px;
+    vertical-align: middle;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+.social-icon:hover {
+    opacity: 1;
+}
+
+.header-site-name {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: var(--primary-color);
+    padding: 5px 0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* --- Основной контент --- */
+.site-content {
+    flex-grow: 1;
+    padding: 30px 0;
+    background-color: var(--light-bg);
+}
+
+/* --- Подвал сайта --- */
+.site-footer {
+    border-top: 1px solid var(--border-color);
+    box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+    margin-top: auto;
+}
+
+.footer-copyright {
+    font-size: 0.9em;
+    color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Стили для страниц аутентификации (вход, выход)
+   ========================================================================== */
+
+.auth-form-container {
+    background-color: var(--white-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    max-width: 450px;
+    width: 100%;
+    margin: 30px auto;
+    text-align: center;
+}
+
+.auth-form-container h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.auth-form-container p {
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    font-size: 1.05em;
+}
+
+/* Стили для полей формы */
+.auth-form-container label {
+    color: var(--primary-color);
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.auth-form-container input[type="text"],
+.auth-form-container input[type="password"],
+.auth-form-container select,
+.auth-form-container textarea { /* Для всех полей ввода */
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.auth-form-container input[type="text"]:focus,
+.auth-form-container input[type="password"]:focus,
+.auth-form-container select:focus,
+.auth-form-container textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(22, 62, 108, 0.2);
+}
+
+/* Стили для кнопок в формах */
+.submit-button {
+    width: 100%;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(210, 10, 17, 0.3);
+}
+
+/* Скрытые поля */
+.auth-form-container input[type="hidden"] {
+    display: none;
+}
+
+/* Сообщения об ошибках */
+.error-message {
+    color: var(--secondary-color);
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+/* Ссылки под формой */
+.auth-links {
+    margin-top: 25px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+    font-size: 0.95em;
+    color: var(--text-muted);
+}
+
+.auth-links a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+.auth-links a:hover {
+    color: var(--hover-primary);
+    text-decoration: none;
+}
+
+/* ==========================================================================
+   Стили для основного контента, таблиц, форм фильтрации и т.д.
+   ========================================================================== */
+
+/* Основная панель контента */
+.main-panel-container {
+    background-color: var(--white-bg);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+/* Информация о пользователе */
+.user-info-panel {
+    background-color: var(--accent-color);
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.15em;
+    color: var(--primary-color);
+    border-left: 5px solid var(--secondary-color); /* Акцентная полоса */
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Заголовки секций */
+.characteristics-info {
+    text-align: center;
+    font-size: 1.3em;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed var(--border-color);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Стили для табов */
+.tabs, .tabs-detail {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--secondary-color);
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Стили для таблиц */
+.table-wrapper {
+    overflow-x: auto;
+    border-radius: 8px;=
+    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+th, td {
+    border: 1px solid var(--border-color);
+    padding: 12px 15px;
+    text-align: left;
+}
+th {
+    background-color: var(--light-bg);
+    font-weight: bold;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    font-size: 0.9em;
+    min-width: 35px;
+
+}
+
+td {
+    background-color: var(--white-bg);
+}
+
+/* Стили для ссылок в таблице */
+td a {
+    color: var(--primary-color);
+    text-decoration: underline;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+td a:hover {
+    color: var(--secondary-color);
+    text-decoration: none;
+}
+
+/* --- Стили для форм фильтрации --- */
+.filter-form-container {
+    background-color: var(--light-bg);
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.filter-form-container table {
+    margin-bottom: 20px;
+}
+
+.filter-form-container th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    padding: 12px 8px;
+    border: 1px solid var(--border-color);
+}
+
+.filter-form-container td {
+    padding: 10px 10px;
+    border: 1px solid var(--border-color);
+    background-color: var(--white-bg);
+}
+
+.filter-form-container select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 0.95em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.filter-form-container select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(22, 62, 108, 0.2);
+}
+
+/* --- Стили для деталей машины --- */
+.machine-detail-container {
+    background-color: var(--white-bg);
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.machine-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px dashed var(--border-color);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.machine-detail-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.machine-serial-number {
+    font-size: 1.3em;
+    color: var(--text-color);
+    font-weight: bold;
+    background-color: var(--accent-color);
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.machine-details-info {
+    font-size: 1.15em;
+    color: var(--text-muted);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+/* Табы для деталей машины */
+.tab-button-detail {
+    border-radius: 8px;
+    color: #555;
+    font-size: 1em;
+    width: 260px;
+}
+
+/* Таблицы с ТО и рекламациями в деталях машины */
+.data-table-container-detail table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    color: black;
+}
+
+.data-table-container-detail th,
+.data-table-container-detail td {
+    border: 1px solid #e0e0e0;
+    padding: 12px 15px;
+    background-color: var(--white-bg);
+    vertical-align: top;
+}
+.data-table-container-detail th {
+    background-color: var(--light-bg);
+    font-weight: bold;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.data-table-container-detail .detail-label {
+    font-weight: bold;
+    color: #333;
+    width: 35%;
+    background-color: #f9f9f9;
+}
+
+.data-table-container-detail .detail-value {
+    color: #555;
+}
+
+.data-table-container-detail td[data-empty="true"] {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Заголовки для списков */
+.data-table-container-detail h4 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 1.3em;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+/* Стили для деталей справочника */
+.section-title {
+    font-size: 1.3em;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px dashed var(--border-color);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.item-dictionary-info {
+    font-size: 1.1em;
+    color: var(--text-muted);
+    margin-left: 20px;
+    font-style: italic;
+}
+
+.item-description-section {
+    margin-top: 25px;
+    margin-bottom: 30px;
+}
+.description-content p {
+    color: #555;
+    font-size: 1.3em;
+}
+
+.back-button-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+
+/* ==========================================================================
+   Адаптивность
+   ========================================================================== */
+
+/* Для разрешений до 1024px (планшеты и большие телефоны) */
+@media (max-width: 1024px) {
+    .header-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+    .header-site-name { width: 100%; }
+    .header-info-auth {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    .header-contact, .header-auth { margin-bottom: 10px; }
+
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .auth-form-container {
+        margin: 20px auto;
+    }
+    .auth-form-container h2 { font-size: 1.6em; }
+    .auth-form-container p { margin-bottom: 20px; }
+    .auth-links { margin-top: 20px; }
+
+    .main-panel-container, .filter-form-container, .machine-detail-container {
+        padding: 20px;
+    }
+    .characteristics-info { font-size: 1.1em; }
+
+    .tabs, .tabs-detail {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .tab-button-detail {
+        width: 90%;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    /* Таблицы на мобильных устройствах */
+    table {
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+    }
+    th, td {
+        padding: 10px 8px;
+        display: block;
+        width: 100%;
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        text-align: left;
+    }
+    th {
+        background-color: var(--light-bg);
+        text-align: left;
+        border-bottom: 2px solid var(--primary-color);
+        text-transform: none;
+        font-size: 1em;
+    }
+    /* Для ячеек с парой "Название: Значение" */
+    .data-table-container-detail td,
+    .filter-form-container td {
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 10px 0;
+        display: block;
+        width: 100%;
+    }
+    .data-table-container-detail .detail-label {
+        display: block;
+        width: auto;
+        margin-bottom: 5px;
+        background-color: transparent;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+    .data-table-container-detail td:last-child,
+    .filter-form-container td:last-child {
+        border-bottom: none;
+    }
+
+    .data-table-container-detail h4 {
+        text-align: center;
+    }
+}
+
+/* Для очень маленьких экранов (телефоны) */
+@media (max-width: 600px) {
+    .header-site-name { font-size: 1.2em; }
+    .phone-number { font-size: 1em; }
+
+    .auth-form-container {
+        padding: 20px;
+        margin: 15px auto;
+    }
+    .auth-form-container h2 { font-size: 1.5em; }
+    .auth-form-container p { font-size: 1em; margin-bottom: 15px; }
+    .auth-links { margin-top: 15px; }
+    .submit-button, .auth-button, .auth-link, .filter-button,.add-data, .clear-filter-button, .tab-button, .tab-button-detail {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    .main-panel-container, .filter-form-container, .machine-detail-container {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    .characteristics-info { font-size: 1.1em; margin-bottom: 20px; }
+
+    .tab-button, .tab-button-detail {
+        width: 95%; /* Чуть больше */
+    }
+}

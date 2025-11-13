@@ -1,0 +1,47 @@
+{% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+
+{% block title %}Поиск техники{% endblock %}
+
+{% block content %} {# Определяем основное содержимое #}
+    <div class="main-panel-container search-container">
+        <h2 class="characteristics-info">Проверьте комплектацию и технические характеристики техники Силант</h2>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+        <div class="filter-form-container search-form">
+            <form method="get">
+                <div class="form-field">
+                    <label for="serial_number">Заводской номер:</label>
+                    <input type="text" id="serial_number" name="serial_number" required>
+                    <div class="form-actions">
+                        <button type="submit" class="filter-button">Поиск</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {% if machine_data %}
+        <div class="table-wrapper detail-table-wrapper">
+            <table class="data-table-container-detail">
+                <thead>
+                    <tr>
+                        <th>Поле</th>
+                        <th>Значение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for key, value in machine_data.items %}
+                <tr>
+                    <td>{{ key | replace_underscores }}</td>
+                    <td>{{ value | default:"-" | replace_underscores }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="empty-data-message">Введите заводской номер для поиска информации.</p>
+        {% endif %}
+    </div>
+{% endblock %}

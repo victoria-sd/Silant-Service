@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Мой Силант{% endblock %}</title>
+
+    {% load static %}
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" />
+    {% load custom_filters %}
+
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-container">
+            {# Логотип #}
+            <div class="header-logo">
+                <a href="#">
+                    <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1122.52 793.70135" height="60" width="100" xml:space="preserve" id="svg2" version="1.1"><metadata id="metadata8"><rdf:RDF><cc:Work rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/></cc:Work></rdf:RDF></metadata><defs id="defs6"/><g transform="matrix(1.3333333,0,0,-1.3333333,0,793.70133)" id="g10"><g transform="translate(66.6142,472.2036)" id="g12"><path id="path14" style="fill:#163e6c;fill-opacity:1;fill-rule:nonzero;stroke:none" d="M 0,0 41.245,-104.439 H 295.73 l -6.984,-17.907 H 110.02 l 40.24,-104.44 h 97.757 l -6.984,-17.907 h -83.536 l 41.343,-103.952 v -0.488 h 374.085 l 40.703,104.441 H 373.521 l 54.616,140.253 h 107.355 l -24.55,-62.995 H 643.409 L 708.661,0 v 0.001 z"/></g></g></svg>
+                </a>
+            </div>
+
+            {# Информация и авторизация #}
+            <div class="header-info-auth">
+                <div class="header-contact">
+                    <span class="phone-number">+7 (835) 220-42-43</span>
+                    {# Ссылка на Telegram #}
+                    <a href="https://t.me/chzsa21" target="_blank" class="telegram-link">
+                        <img src="{% static 'images/telegram_icon.png' %}" alt="Telegram" class="social-icon">
+                    </a>
+                </div>
+                {# Кнопка авторизации #}
+                <div class="header-auth">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'account_logout' %}" class="auth-link">Выйти ({{ user.username|replace_underscores }})</a>
+                    {% else %}
+                        <a href="{% url 'account_login' %}" class="auth-button">Авторизация</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="header-site-name">
+            Электронная сервисная книжка "Мой Силант"
+        </div>
+    </header>
+
+    {# --- Основное содержимое страницы --- #}
+    <main class="site-content">
+        <div class="content-container">
+            {% block content %}
+                <p>Добро пожаловать на сайт!</p>
+            {% endblock %}
+        </div>
+    </main>
+
+    {# --- Футер --- #}
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-contact">
+                <span class="phone-number">+7 (835) 220-42-43</span>
+                <a href="https://t.me/chzsa21" target="_blank" class="telegram-link">
+                    <img src="{% static 'images/telegram_icon.png' %}" alt="Telegram" class="social-icon">
+                </a>
+            </div>
+            <div class="footer-copyright">
+                Мой Силант 2022
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

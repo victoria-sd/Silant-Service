@@ -1,0 +1,127 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}Детали машины: {{ machine.serial_number_machine|default:'-' }}{% endblock %}
+
+{% block content %}
+    <div class="machine-detail-container">
+        <div class="machine-detail-header">
+            <h1 class="machine-detail-title">Машина</h1>
+            <span class="machine-serial-number">Зав. №: {{ machine.serial_number_machine|default:"-" }}</span>
+        </div>
+
+        <div class="machine-details-info">
+            Информация о проведенных ТО и рекламациях Вашей техники
+        </div>
+
+        <div class="tabs-detail">
+            <a href="{% url 'machine_list' %}" class="tab-button-detail">Вернуться к списку машин</a>
+            <a href="{% url 'machine_detail' machine.pk %}" class="tab-button-detail">Общая информация</a>
+            <a href="{% url 'maintenance_list_for_machine' machine.pk %}" class="tab-button-detail">Tехническое обслуживание</a>
+            <a href="{% url 'reclamation_list_for_machine' machine.pk %}" class="tab-button-detail">Рекламации</a>
+        </div>
+
+        {# --- БЛОК ФИЛЬТРАЦИИ РЕКЛАМАЦИЙ --- #}
+        <div class="filter-form-container">
+            <form method="get" action="{% url 'reclamation_list_for_machine' machine.pk %}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Узел отказа</th>
+                            <th>Способ восстановления</th>
+                            <th>Сервисная компания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {# Выпадающий список для узла отказа #}
+                            <td>
+                                <select name="failure_node">
+                                    <option value="">-- Все узлы --</option>
+                                    {% for node in failure_nodes %}
+                                        <option value="{{ node.pk }}" {% if filter_params.failure_node == node.pk|stringformat:"s" %}selected{% endif %}>
+                                            {{ node.name|default:"-"|replace_underscores }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+
+                            {# Выпадающий список для способа восстановления #}
+                            <td>
+                                <select name="restoration_method">
+                                    <option value="">-- Все способы --</option>
+                                    {% for method in restoration_methods %}
+                                        <option value="{{ method.pk }}" {% if filter_params.restoration_method == method.pk|stringformat:"s" %}selected{% endif %}>
+                                            {{ method.name|default:"-"|replace_underscores }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+
+                            {# Выпадающий список для сервисной компании #}
+                            <td>
+                                <select name="service_company">
+                                    <option value="">-- Все компании --</option>
+                                    {% for company in service_companies %}
+                                        <option value="{{ company.pk }}" {% if filter_params.service_company == company.pk|stringformat:"s" %}selected{% endif %}>
+                                            {{ company.username|default:"-"|replace_underscores }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="filter-button">Применить фильтры</button>
+                <a href="{% url 'reclamation_list_for_machine' machine.pk %}" class="clear-filter-button">Сбросить</a>
+            </form>
+        </div>
+
+        {# Отображение общей информации о машине #}
+        <div class="data-table-container-detail">
+            <h4>Рекламации:</h4>
+            <a href="{% url 'reclamation_create' machine.pk %}" class="add-data">Внести новые данные</a>
+            <div class="data-table-container-detail">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Дата отказа</th>
+                            <th>Наработка, м/час</th>
+                            <th>Узел отказа</th>
+                            <th>Описание отказа</th>
+                            <th>Способ восстановления</th>
+                            <th>Используемые запасные части</th>
+                            <th>Дата восстановления</th>
+                            <th>Время простоя техники, дни</th>
+                            <th>Сервисная компания</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reclamation in reclamation_list %}
+                            <tr>
+                                <td>{{ reclamation.date_of_failure|date:"d.m.Y"|default:"-" }}</td>
+                                <td>{{ reclamation.mileage_hours|default:"-" }}</td>
+                                <td>
+                                    <a href="{% url 'dictionary_item_detail' reclamation.failure_node.pk %}">
+                                        {{ reclamation.failure_node.name|default:"-" }}
+                                    </a>
+                                </td>
+                                <td>{{ reclamation.description_of_failure|default:"-" }}</td>
+                                <td>
+                                    <a href="{% url 'dictionary_item_detail' reclamation.restoration_method.pk %}">
+                                        {{ reclamation.restoration_method.name|default:"-" }}
+                                    </a>
+                                </td>
+                                <td>{{ reclamation.spare_parts_used|default:"-" }}</td>
+                                <td>{{ reclamation.date_of_restoration|date:"d.m.Y"|default:"-" }}</td>
+                                <td>{{ reclamation.downtime_hours|default:"-"|floatformat:"0" }}</td>
+                                <td>{{ reclamation.service_company.username|default:"-"|replace_underscores }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
