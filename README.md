@@ -23,7 +23,48 @@
 
 
 ## Структура проекта
-your_project/ ├── manage.py ├── your_project/ # Основной пакет проекта │ ├── settings.py │ ├── urls.py │ ├── wsgi.py │ └── asgi.py ├── machines/ # Приложение для управления техникой │ ├── models.py │ ├── views.py │ ├── urls.py │ ├── forms.py │ └── … ├── service_records/ # Приложение для ТО и рекламаций │ ├── models.py │ ├── views.py │ ├── urls.py │ ├── forms.py │ └── … ├── common/ # Общие модели/функции (например, DictionaryItem) │ ├── models.py │ ├── views.py │ ├── urls.py │ └── … ├── templates/ # Шаблоны Django │ ├── base/ # Базовые шаблоны │ │ └── default.html │ ├── account/ # Шаблоны для django-allauth │ │ ├── account/ │ │ │ ├── base.html │ │ │ ├── login.html │ │ │ ├── signup.html │ │ │ ├── logout.html │ │ │ └── … │ ├── machines/ # Шаблоны для приложения machines │ │ ├── machine_list.html │ │ ├── machine_detail.html │ │ └── … │ └── … ├── static/ # Статические файлы │ ├── css/ │ │ └── style.css │ ├── js/ │ ├── fonts/ │ └── img/ └── requirements.txt # Список зависимостей
+silant_service /
+├── manage.py
+├── silant_service /             # Основной пакет проекта
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── machines/                 # Приложение для управления техникой
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   ├── forms.py
+│   └── ...
+├── service_records/          # Приложение для ТО и рекламаций
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   ├── forms.py
+│   └── ...
+├── common/                   # Модели справочников
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   └── ...
+├── templates/                # Шаблоны Django
+│   ├── flatpages/                 # Базовые шаблоны
+│   │   └── default.html
+│   ├── account/              # Шаблоны для django-allauth
+│   │   ├── base.html
+│   │   ├── login.html
+│   │   └── ...
+│   ├── machines/             # Шаблоны для приложения machines
+│   │   ├── machine_list.html
+│   │   ├── machine_detail.html
+│   │   └── ...
+│   └── ...
+├── static/                   # Статические файлы
+│   ├── css/
+│   │   └── style.css
+│   ├── fonts/
+│   └── images/
+
 
 
 ## URL-маршруты
